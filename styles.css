@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.main-container {
+    display: flex;
+    flex-wrap: wrap; /* Позволяет детям переноситься на следующую строку */
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #6f8398;
+    background-image: url('goslin.jpg'); /* Устанавливает изображение фона */
+    background-size: cover; /* Обеспечивает покрытие всего контейнера изображением */
+    background-position: center; /* Центрирует изображение внутри контейнера */
+    background-repeat: no-repeat; /* Избегает повторения изображения */
+
+}
+
+.column {
+    flex: 1;
+    max-width: 30%; /* Устанавливает максимальную ширину для каждой колонки при большом экране */
+    margin: 0 10px;
+    padding: 15px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-height: 200px; /* Устанавливает минимальную высоту; уберите, если она не нужна */
+    box-sizing: border-box; /* Включает padding и border в размеры элемента */
+}
+
+h2 {
+    color: #343a40;
+    text-align: center;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 10px;
+    font-size: 2rem;
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .column {
+        max-width: 100%;
+        margin-bottom: 20px; /* Добавляет отступ снизу для разделения секций на маленьких экранах */
+    }
+}
