@@ -20,7 +20,7 @@ header {
     align-items: flex-start;
     padding: 20px;
     background-color: #012f4a;
-    background-image: url('city.gif'); /* Устанавливает изображение фона */
+    background-image: url('bg.gif'); /* Устанавливает изображение фона */
     background-size: cover; /* Обеспечивает покрытие всего контейнера изображением */
     background-position: center; /* Центрирует изображение внутри контейнера */
     background-repeat: no-repeat; /* Избегает повторения изображения */
