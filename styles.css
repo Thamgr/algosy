@@ -7,6 +7,7 @@ body {
 
 header {
     background-color: #f8f9fa;
+    color: #012f4a;
     padding: 20px;
     text-align: center;
     font-size: 1.5rem;
@@ -18,8 +19,8 @@ header {
     justify-content: space-around;
     align-items: flex-start;
     padding: 20px;
-    background-color: #6f8398;
-    background-image: url('space.gif'); /* Устанавливает изображение фона */
+    background-color: #012f4a;
+    background-image: url('city.gif'); /* Устанавливает изображение фона */
     background-size: cover; /* Обеспечивает покрытие всего контейнера изображением */
     background-position: center; /* Центрирует изображение внутри контейнера */
     background-repeat: no-repeat; /* Избегает повторения изображения */
@@ -40,7 +41,7 @@ header {
 }
 
 h2 {
-    color: #343a40;
+    color: #012f4a;
     text-align: center;
 }
 
