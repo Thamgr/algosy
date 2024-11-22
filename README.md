@@ -1,1 +1,1 @@
-# algos-html
+# algosy
