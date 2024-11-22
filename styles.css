@@ -19,7 +19,7 @@ header {
     align-items: flex-start;
     padding: 20px;
     background-color: #6f8398;
-    background-image: url('goslin.jpg'); /* Устанавливает изображение фона */
+    background-image: url('space.gif'); /* Устанавливает изображение фона */
     background-size: cover; /* Обеспечивает покрытие всего контейнера изображением */
     background-position: center; /* Центрирует изображение внутри контейнера */
     background-repeat: no-repeat; /* Избегает повторения изображения */
