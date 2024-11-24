@@ -1,16 +1,34 @@
 body {
-    font-family: Arial, sans-serif;
+    background: url('bg.gif') center top / cover no-repeat fixed;
     margin: 0;
     padding: 0;
-    line-height: 1.6;
+    font-family: Arial, sans-serif;
+    overflow: scroll; /* Прокрутка остается, но ползунок скрыт */
+}
+
+body::-webkit-scrollbar {
+    display: none; /* Убираем ползунок для Webkit-браузеров */
 }
 
 header {
-    background-color: #f8f9fa;
-    color: #012f4a;
-    padding: 20px;
+    background: none; /* Убираем фон */
+    color: #ffffff; /* Делаем текст светлым */
+    padding: 40px 20px;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 2rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8); /* Для улучшения читаемости */
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .main-container {
@@ -19,12 +37,7 @@ header {
     justify-content: space-around;
     align-items: flex-start;
     padding: 20px;
-    background-color: #012f4a;
-    background-image: url('bg.gif'); /* Устанавливает изображение фона */
-    background-size: cover; /* Обеспечивает покрытие всего контейнера изображением */
-    background-position: center; /* Центрирует изображение внутри контейнера */
-    background-repeat: no-repeat; /* Избегает повторения изображения */
-
+    background: none; /* Убираем фон */
 }
 
 .column {
@@ -34,10 +47,20 @@ header {
     padding: 15px;
     background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: 30px;
+    border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    min-height: 200px; /* Устанавливает минимальную высоту; уберите, если она не нужна */
     box-sizing: border-box; /* Включает padding и border в размеры элемента */
+    animation: fadeIn 2s ease-in-out;
+}
+
+a, a:visited {
+    color: #012f4a; /* Светлый цвет для всех ссылок */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+a:hover {
+    text-decoration: underline; /* Добавляем подчеркивание при наведении */
+    color: #50c9c3; /* Цвет при наведении */
 }
 
 h2 {
@@ -54,11 +77,15 @@ li {
     margin-bottom: 10px;
 }
 
+
 footer {
-    background-color: #f8f9fa;
+    background-color: #012f4a; /* Темно-синий цвет */
+    color: #ffffff; /* Светлый текст для контраста */
     text-align: center;
-    padding: 10px;
-    font-size: 2rem;
+    padding: 10px; /* Увеличиваем немного отступы для удобства */
+    font-size: 1.2rem; /* Немного уменьшаем шрифт для читабельности */
+    box-sizing: border-box; /* Чтобы padding не выходил за пределы */
+    /* border-top: 5px solid #ffffff; /* Опционально: белая граница сверху для акцента */
 }
 
 @media (max-width: 768px) {
