@@ -47,7 +47,7 @@ header {
     padding: 15px;
     background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box; /* Включает padding и border в размеры элемента */
     animation: fadeIn 2s ease-in-out;
@@ -79,7 +79,7 @@ li {
 
 
 footer {
-    background-color: #012f4a; /* Темно-синий цвет */
+    background-color: #031607; /* Темно-синий цвет */
     color: #ffffff; /* Светлый текст для контраста */
     text-align: center;
     padding: 10px; /* Увеличиваем немного отступы для удобства */
