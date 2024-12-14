@@ -3,20 +3,21 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    overflow: scroll; /* Прокрутка остается, но ползунок скрыт */
+    overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
 }
 
+/* Скрываем полосу прокрутки для Webkit-браузеров */
 body::-webkit-scrollbar {
-    display: none; /* Убираем ползунок для Webkit-браузеров */
+    display: none;
 }
 
 header {
-    background: none; /* Убираем фон */
-    color: #ffffff; /* Делаем текст светлым */
-    padding: 40px 20px;
+    background: none;
+    color: #ffffff;
+    padding: 20px 10px; /* Уменьшаем отступы для мобильных */
     text-align: center;
-    font-size: 2rem;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8); /* Для улучшения читаемости */
+    font-size: 1.5rem; /* Уменьшаем размер шрифта для мобильных */
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
     animation: fadeIn 2s ease-in-out;
 }
 
@@ -33,39 +34,37 @@ header {
 
 .main-container {
     display: flex;
-    flex-wrap: wrap; /* Позволяет детям переноситься на следующую строку */
-    justify-content: space-around;
-    align-items: flex-start;
-    padding: 20px;
-    background: none; /* Убираем фон */
+    flex-direction: column; /* По умолчанию колонки располагаются вертикально */
+    padding: 10px; /* Уменьшаем отступы для мобильных */
+    background: none;
 }
 
 .column {
-    flex: 1;
-    max-width: 30%; /* Устанавливает максимальную ширину для каждой колонки при большом экране */
-    margin: 0 10px;
+    width: 100%; /* Каждая колонка занимает всю ширину экрана */
+    margin: 10px 0; /* Отступы сверху и снизу между колонками */
     padding: 15px;
     background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box; /* Включает padding и border в размеры элемента */
+    box-sizing: border-box;
     animation: fadeIn 2s ease-in-out;
 }
 
 a, a:visited {
-    color: #012f4a; /* Светлый цвет для всех ссылок */
-    text-decoration: none; /* Убираем подчеркивание */
+    color: #012f4a;
+    text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline; /* Добавляем подчеркивание при наведении */
-    color: #50c9c3; /* Цвет при наведении */
+    text-decoration: underline;
+    color: #50c9c3;
 }
 
 h2 {
     color: #012f4a;
     text-align: center;
+    font-size: 1.2rem; /* Уменьшаем размер шрифта h2 для мобильных */
 }
 
 ul {
@@ -74,27 +73,42 @@ ul {
 }
 
 li {
-    margin-bottom: 10px;
+    margin-bottom: 5px; /* Уменьшаем отступ между элементами списка */
 }
-
 
 footer {
-    background-color: #ffffff; /* Темно-синий цвет */
-    color: #ffffff; /* Светлый текст для контраста */
+    background-color: #ffffff;
+    color: #ffffff;
     text-align: center;
-    padding: 10px; /* Увеличиваем немного отступы для удобства */
-    font-size: 1.2rem; /* Немного уменьшаем шрифт для читабельности */
-    box-sizing: border-box; /* Чтобы padding не выходил за пределы */
-    /* border-top: 5px solid #ffffff; /* Опционально: белая граница сверху для акцента */
+    padding: 10px;
+    font-size: 1rem;
+    box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
+/* Медиа-запрос для экранов шире 768px (десктоп) */
+@media (min-width: 769px) {
     .main-container {
-        flex-direction: column;
+        flex-direction: row; /* На десктопе колонки располагаются горизонтально */
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: flex-start;
+        padding: 20px;
     }
 
     .column {
-        max-width: 100%;
-        margin-bottom: 20px; /* Добавляет отступ снизу для разделения секций на маленьких экранах */
+        max-width: 30%;
+        margin: 0 10px;
+    }
+
+    header {
+        padding: 40px 20px;
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+    li {
+        margin-bottom: 10px;
     }
 }
