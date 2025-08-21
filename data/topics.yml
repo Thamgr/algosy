@@ -1,4 +1,4 @@
 - name: Лето
-  photo: ./static/kolobki.jpg
+  photo: /algosy/static/kolobki.jpg
   contest: https://informatics.msk.ru/course/view.php?id=5637
   lesson: https://www.youtube.com/watch?v=xvFZjo5PgG0
