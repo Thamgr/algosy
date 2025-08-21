@@ -1,0 +1,6 @@
+- type: warn
+  date: 2025-08-21        # опционально (используется для сортировки)
+  title: Новый сайтик!
+  text: Просто зацените эту красоту
+  link: https://thamgr.github.io/algosy/
+  link_label: Туть

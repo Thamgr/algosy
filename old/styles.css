@@ -1,0 +1,195 @@
+body {
+    background-color: #343a40;
+    background: url('static/lofi.gif') center top / cover no-repeat fixed;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Минимальная высота вьюпорта */
+}
+
+header {
+    background: #222;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow: hidden; /* Гарантия, что ссылки не выйдут за границы */
+    white-space: nowrap;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+/* Логотип + название */
+.logo-title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0; /* Запрещаем сжатие */
+    max-width: 180px; /* Ограничиваем ширину, чтобы Algosy не занимал всю строку */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.logo {
+    height: 40px;
+}
+
+.site-title {
+    font-size: 1.5rem;
+    color: #ccc;
+}
+
+/* Навигация справа */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Немного уменьшили расстояние между ссылками */
+    flex-shrink: 0; /* Запрещаем уменьшение */
+    flex-wrap: nowrap; /* Запрещаем перенос */
+    min-width: 140px; /* Минимальный размер для ссылок */
+    max-width: 40%; /* Ограничиваем максимальную ширину, чтобы ссылки не раздвигали хедер */
+    padding-right: 10px;
+}
+
+/* Ссылки */
+nav a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 1.4rem; /* Чуть уменьшили размер иконок */
+    white-space: nowrap; /* Полностью запрещаем перенос */
+}
+
+/* Фикс для мобильных устройств */
+@media (max-width: 600px) {
+    header {
+        padding: 10px;
+    }
+
+    .logo-title {
+        max-width: 35%;
+    }
+
+    nav {
+        max-width: 60%;
+        gap: 8px; /* Уменьшаем расстояние между иконками */
+    }
+
+    nav a {
+        font-size: 1.2rem; /* Делаем значки меньше, чтобы влезли на маленьких экранах */
+    }
+}
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+/* Увеличенный отступ между хедером и контентом */
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.column {
+    width: 100%;
+    margin: 10px 0;
+    padding: 15px;
+    background-color: #222;
+    border: 1px solid #555;
+    border-radius: 7px;
+    box-sizing: border-box;
+    animation: fadeIn 2s ease-in-out;
+}
+
+a, a:visited {
+    color: #ccc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #50c9c3;
+}
+
+h2 {
+    color: #ccc;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+footer {
+    background-color: #222;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    height: 60px; /* Увеличенная высота футера */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Увеличиваем размер гриба */
+footer marquee {
+    font-size: 2rem;
+    width: 100%;
+}
+
+@media (min-width: 769px) {
+    .main-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: flex-start;
+        padding-top: 120px; /* Чуть больше отступа для десктопа */
+    }
+
+    .column {
+        max-width: 30%;
+        margin: 0 10px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+}

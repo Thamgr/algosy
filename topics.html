@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Алгосы — темы</title>
+  <link rel="icon" href="./static/logo.png" type="image/png" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="./static/logo_neg.png" type="image/png" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://unpkg.com">
+  <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <style>
+    :root{
+      --bg:#0c0f14;--surface:#121621;--muted:#1a1f2b;--text:#e6e6ea;--subtle:#aab1c3;
+      --accent:#6ae3ff;--radius:16px;--shadow:0 8px 28px rgba(0,0,0,.35);--maxw:1100px
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui, sans-serif;background:var(--bg);color:var(--text)}
+    a{color:var(--accent);text-decoration:none}
+    header{position:sticky;top:0;background:#0c0f14d9;padding:14px 24px;backdrop-filter:saturate(1.2) blur(6px)}
+    .nav{display:flex;align-items:center;gap:16px;max-width:var(--maxw);margin:0 auto}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700}
+    .logo-badge{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#172033}
+    .spacer{flex:1}
+    .btn{padding:8px 12px;border-radius:10px;background:var(--muted)}
+    main{max-width:var(--maxw);margin:0 auto;padding:24px}
+    h1{margin:0 0 16px;font-size:20px;color:var(--subtle);font-weight:600}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(260px,1fr));gap:18px}
+    .card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px;display:flex;flex-direction:column;gap:12px}
+    .thumb{width:100%;aspect-ratio:16/9;border-radius:12px;background:#0e1220;background-size:cover;background-position:center;border:1px solid rgba(255,255,255,.06)}
+    .title{font-weight:700}
+    .actions{display:flex;gap:8px;margin-top:auto}
+    .link{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:var(--muted);font-size:14px}
+    .link[disabled]{opacity:.45;pointer-events:none}
+    .empty{opacity:.8;color:var(--subtle);padding:24px;text-align:center}
+    .filters{display:flex;gap:8px;margin:8px 0 16px}
+    .search{flex:1;background:var(--muted);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 10px;color:var(--text)}
+    footer{color:var(--subtle);font-size:14px;padding:24px 0;text-align:center}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-badge">📚</div>
+        <span>Алгосы</span>
+      </div>
+      <div class="spacer"></div>
+      <a class="btn" href="/index.html">🏠 Главная</a>
+      <a class="btn" href="/topics.html">📚 Занятия</a>
+      <a class="btn" href="/ratings.html">🏆 Рейтинги</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Прошедшие занятия</h1>
+    <div class="filters">
+      <input id="q" class="search" placeholder="Поиск по названию…" />
+    </div>
+    <div id="grid" class="grid">
+      <div class="empty">Загрузка…</div>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 Алгосы — <a href="https://github.com/Thamgr/algosy" target="_blank">GitHub</a>
+  </footer>
+
+  <script>
+  (function(){
+    const YAML_URL = "./data/topics.yml"; // положи сюда свой конфиг
+    const grid = document.getElementById('grid');
+    const q = document.getElementById('q');
+
+    const normalize = s => String(s ?? "").trim();
+    function cardHTML(item){
+      const name = normalize(item.name);
+      const photo = normalize(item.photo);
+      const contest = normalize(item.contest);
+      const lesson = normalize(item.lesson);
+
+      const imgStyle = photo ? `style="background-image:url('${photo.replace(/"/g,'&quot;')}')"` : "";
+      return `
+        <article class="card" data-name="${name.toLowerCase()}">
+          <div class="thumb" ${imgStyle}></div>
+          <div class="title">${name || "Без названия"}</div>
+          <div class="actions">
+            ${contest ? `<a class="link" href="${contest}" target="_blank">🏁 Контест</a>` : ""}
+            ${lesson ? `<a class="link" href="${lesson}" target="_blank">🎥 Занятие</a>` : ""}
+          </div>
+        </article>`;
+    }
+
+    function render(list){
+      if (!list.length){
+        grid.innerHTML = `<div class="empty">Пока пусто. Добавь элементы в <code>data/topics.yml</code>.</div>`;
+        return;
+      }
+      grid.innerHTML = list.map(cardHTML).join("");
+    }
+
+    function filter(list, text){
+      const t = text.trim().toLowerCase();
+      return t ? list.filter(x => String(x.name||"").toLowerCase().includes(t)) : list;
+    }
+
+    async function load(){
+      try{
+        const res = await fetch(YAML_URL, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP "+res.status);
+        const text = await res.text();
+        let doc = jsyaml.load(text);
+
+        if (Array.isArray(doc)) {
+        } else if (doc && typeof doc === 'object') {
+          doc = Object.values(doc);
+        } else {
+          doc = [];
+        }
+
+        const items = doc.map(x => ({
+          name: x.name ?? "",
+          photo: x.photo ?? "",
+          contest: x.contest ?? "",
+          lesson: x.lesson ?? ""
+        })).sort((a,b)=> String(a.name).localeCompare(String(b.name), 'ru'));
+
+        render(items);
+        q.addEventListener('input', () => { render(filter(items, q.value)); });
+
+      } catch (e){
+        console.error(e);
+        grid.innerHTML = `<div class="empty">Не удалось загрузить <code>data/topics.yml</code></div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', load);
+  })();
+  </script>
+</body>
+</html>

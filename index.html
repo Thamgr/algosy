@@ -1,90 +1,286 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8">
-    <title>ЦРДО Алгосы</title>
-    <link rel="icon" type="image/png" href="static/favicon.png">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Алгосы — главная</title><!-- Светлая тема -->
+  <link rel="icon" href="./static/logo.png" type="image/png" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="./static/logo_neg.png" type="image/png" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://unpkg.com">
+  <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <style>
+    :root{
+      --bg:#0c0f14;--surface:#121621;--muted:#1a1f2b;--text:#e6e6ea;--subtle:#aab1c3;--accent:#6ae3ff;--accent-2:#9bff8a;--radius:16px;--shadow:0 8px 28px rgba(0,0,0,.35);--maxw:1100px;
+      --danger:#ff6b6b;--ok:#2fd28f;
+    }
+    body{margin:0;font-family:system-ui, sans-serif;background:var(--bg);color:var(--text);} 
+    a{color:var(--accent);text-decoration:none}
+    .container{max-width:var(--maxw);margin:0 auto;padding:24px;}
+    header{position:sticky;top:0;background:#0c0f14d9;padding:14px 24px;}
+    .nav{display:flex;align-items:center;gap:16px;max-width:var(--maxw);margin:0 auto;}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700;}
+    .logo-badge{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#172033;}
+    .spacer{flex:1}
+    .btn{padding:8px 12px;border-radius:10px;background:var(--muted);}
+
+    .logo-badge {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #172033;
+        overflow: hidden; /* если логотип больше, он не вылезет */
+    }
+
+    .logo-badge img {
+        max-width: 70%;
+        max-height: 70%;
+        object-fit: contain;
+    }
+
+    .panel{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);}
+    .section-title{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--subtle);font-weight:600;}
+    .body{padding:14px 18px}
+
+    .grid-two{display:grid;gap:24px;}
+    @media(min-width:900px){.grid-two{grid-template-columns:2fr 1fr;}}
+
+    .quick{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));}
+    .qcard{display:flex;align-items:center;justify-content:center;padding:16px;background:var(--muted);border-radius:14px;box-shadow:var(--shadow);}
+    .qcard:hover{background:#1d2536}
+
+    .list{list-style:none;padding:0;margin:0}
+    .list li{padding:8px 0}
+
+    /* Announcements */
+    .ann-list{list-style:none;margin:0;padding:10px 12px 4px}
+    .ann-item{display:flex;gap:12px;align-items:flex-start;padding:10px 8px;border-radius:12px}
+    .ann-item:hover{background:rgba(255,255,255,.03)}
+    .ann-item .tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;font-size:12px;letter-spacing:.2px;background:#182031;color:#cfe9ff;border:1px solid rgba(255,255,255,.08)}
+    .ann-item .danger{background:#2a1519;color:#ffd7db;border-color:#ff6b6b40}
+    .ann-item .ok{background:#11261d;color:#caf3e3;border-color:#2fd28f40}
+
+    .ann-list { display: grid; gap: 10px; }
+    .ann {
+    display:flex; gap:12px; padding:10px 12px; border-radius:12px;
+    border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03);
+    }
+    .ann--info    { border-color: rgba(106,227,255,.25); }
+    .ann--warn    { border-color: rgba(255,200,80,.25); }
+    .ann--success { border-color: rgba(155,255,138,.25); }
+
+    .ann-icon { font-size:18px; line-height:1; padding-top:2px; }
+    .ann-body { flex:1; }
+    .ann-title { font-weight:700; margin-bottom:2px; }
+    .ann-text  { color:#cbd3e4; }
+    .ann-foot  { display:flex; gap:10px; margin-top:6px; align-items:center; }
+    .ann-meta  { color:#9aa5bd; font-size:12px; }
+    .ann-link  { padding:4px 8px; border-radius:8px; background:rgba(255,255,255,.06); }
+    .muted     { color:#9aa5bd; }
+    .ann-panel { margin-top: 24px; } /* зазор между верхними панелями и объявлениями */
+
+    footer{color:var(--subtle);font-size:14px;padding:24px 0;text-align:center}
+  </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div class="logo-title">
-                <img  class="logo" src="static/logo.jpg" alt="Logo">
-            </div>
-            <nav>
-                <a href="https://yandex.zoom.us/j/4451722167" target="_blank">📺</a>
-                <a href="https://codeforces.com/group/sEg1i0OjvV/contests" target="_blank">🧑‍🧑‍🧒‍🧒</a>
-                <a href="https://docs.google.com/spreadsheets/d/1SBeX7SN7MSNwImvTdxmVAd1oWoa9DkKRGy63ElZtB7w/edit?usp=sharing" target="_blank">🩻</a>
-            </nav>
+  <header>
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-badge">
+            <img src="./static/logo_neg.png" alt="logo">
         </div>
-    </header>
+        <span>Алгосы</span>
+      </div>
+      <div class="spacer"></div>
+      <a class="btn" href="/index.html">🏠 Главная</a>
+      <a class="btn" href="/topics.html">📚 Занятия</a>
+      <a class="btn" href="/ratings.html">🏆 Рейтинги</a>
+    </nav>
+  </header>
 
-    <main class="main-container">
+  <main class="container">
+    <section class="grid-two">
+      <div class="panel">
+        <div class="section-title">Ссылки</div>
+        <div class="body">
+          <div class="quick">
+            <a class="qcard" href="https://codeforces.com/group/LROqnBqT12" target="_blank">📊 Codeforces</a>
+            <a class="qcard" href="https://informatics.msk.ru/course/view.php?id=5637" target="_blank">📖 Informatics</a>
+            <a class="qcard" href="https://yandex.zoom.us/j/4451722167" target="_blank">📺 Zoom</a>
+            <a class="qcard" href="https://t.me/+cm_tA0nRjy82Yjgy" target="_blank">💬 Telegram</a>
+          </div>
+        </div>
+      </div>
 
-        <section id="lectures" class="column">
-            <h2>✍️ Записи занятий</h2>
-            <ul>
-                <li><a href="https://disk.yandex.ru/i/cZWKtH6ZX0zHWg" target="_blank">👫 Парсоч (18.05)</a></li>
-                <li><a href="https://disk.yandex.ru/i/WERyKKOK_0Sr2w" target="_blank">🐊 LCA (27.04)</a></li>
-                <li><a href="https://disk.yandex.ru/i/_qkSV71r5YXNsg" target="_blank">🥗 Куча (20.04)</a></li>
-                <li><a href="https://disk.yandex.ru/i/mr_VHtouSOqxnA" target="_blank">🌴 Декартово Дерево (23.03)</a></li>
-                <li><a href="https://disk.yandex.ru/i/f5Vu-XGRm_PsUQ" target="_blank">🌵 Дерево Фенвика (16.03)</a></li>
-                <li><a href="https://disk.yandex.ru/i/q9AT6Xg4jbq8dg" target="_blank">🌳 Дерево отрезков (09.03)</a></li>
-                <li><a href="https://disk.yandex.ru/i/qhSYP-5X9H7tkA" target="_blank">🎨 СНМ + Мин остов (02.03)</a></li>
-                <li><a href="https://disk.yandex.ru/i/-TE2ZqclTzCjkw" target="_blank">🧛 Графы-3 (16.02)</a></li>
-                <li><a href="https://disk.yandex.ru/i/ymP5A4PyoayLiA" target="_blank">🧛‍♂️ Графы-2 (09.02)</a></li>
-                <li><a href="https://disk.yandex.ru/i/36QDZFeB630G2A" target="_blank">🧛‍♀️ Графы-1 (02.02)</a></li>
-                <li><a href="https://disk.yandex.ru/i/bd34hXm-bTn6Sg" target="_blank">💼 ДП-2 (26.01)</a></li>
-                <li><a href="https://disk.yandex.ru/i/vQZEueVap8WX6A" target="_blank">🐢 ДП-1 (21.12)</a></li>
-                <li><a href="https://disk.yandex.ru/i/pdkR-6mS0SGgDg" target="_blank">🎰 Хеши (15.12)</a></li>
-                <li><a href="https://disk.yandex.ru/i/GSruzIC8xA0GiQ" target="_blank">📜 Строки (08.12)</a></li>
-                <li><a href="https://disk.yandex.ru/i/lT1bQo3-UV3Jfg" target="_blank">⚙️ Перебор (30.11)</a></li>
-                <li><a href="https://disk.yandex.ru/i/G07JXsdYmygrYA" target="_blank">🫧 Сортировки (24.11)</a></li>
-                <li><a href="https://disk.yandex.ru/i/5brPzuNNX2O6-w" target="_blank">🫘 Бинарный поиск (17.11)</a></li>
-                <li><a href="https://disk.yandex.ru/i/D_aUaya8ogsAww" target="_blank">📏 Линейные алгоритмы (10.11)</a></li>
-                <!-- Добавьте новые ссылки на лекции здесь -->
-            </ul>
-        </section>
+      <aside class="panel">
+        <div class="section-title">Топ-3</div>
+        <div class="body">
+          <ul class="list" id="top3-list">
+            <li>Загрузка...</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
 
-        <section id="contests" class="column">
-            <h2>🎓 Учебные задачи</h2>
-            <ul>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=68791&chapterid=114541#1" target="_blank">🔥 Отжиг</a></li>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=47520&chapterid=111796#1" target="_blank">🐊 LCA</a></li>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=1234&chapterid=1164#1" target="_blank">🥗 Куча</a></li>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=1974&chapterid=2781#1" target="_blank">🌴 Декартово Дерево</a></li>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=41881#1" target="_blank">🌳 Дерево отрезков, 🌵 Дерево Фенвика</a></li>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=1089#1" target="_blank">🎨 СНМ</a> <a>|</a> </a> <a href="https://informatics.msk.ru/mod/statements/view.php?id=261&chapterid=1377#1" target="_blank">Мин остов</a></li>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=218#1" target="_blank">🧛 Флойд</a> <a>|</a> </a> <a href="https://informatics.msk.ru/mod/statements/view.php?id=260#1" target="_blank">Форд-Беллман</a></li>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=255#1" target="_blank">🧛‍♂️ BFS</a> <a>|</a> <a href="https://informatics.msk.ru/mod/statements/view.php?id=193#1" target="_blank">Дейкстра</a></li>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=256#1" target="_blank">🧛‍♀️ DFS</a></li>
-                <li><a href="https://informatics.msk.ru/mod/statements/view.php?id=813&chapterid=3087#1" target="_blank">💼 Рюкзак</a></li>
-                <!-- Добавьте новые ссылки на контесты здесь -->
-            </ul>
-        </section>
-<!--
-        <section id="contests" class="column">
-            <h2>🧠 Контесты</h2>
-            <ul>
-                <li><a href="https://codeforces.com/contests" target="_blank">Страничка с контестами</a></li>
-            </ul>
-        </section>
--->
-
-        <section id="ranking" class="column">
-            <h2>💀 Рейтинги</h2>
-            <iframe width="100%" height="360" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQPL4mgBevbarZ4tRTkEoURX23X3pB5W2N2nHaE194gxW1RzUfvTvFnqKGi7FBZpn6fzZixyfWtrUlw/pubchart?oid=1515325261&amp;format=interactive"></iframe>
-        </section>
-    </main>
+    <section class="panel ann-panel">
+        <div class="section-title">Объявления</div>
+        <div id="announcements" class="ann-list"><div class="muted">Загрузка…</div></div>
+    </section>
 
     <footer>
-        <marquee behavior="alternate" scrollamount="10">
-            <marquee behavior="alternate" direction="up" height="60">👾</marquee>
-        </marquee>
+      © 2025 Алгосы — <a href="https://github.com/Thamgr/algosy" target="_blank">GitHub</a>
     </footer>
-    
-    
+  </main>
+
+  <script>
+(function(){
+  const GVIZ_URL = "https://docs.google.com/spreadsheets/d/1SBeX7SN7MSNwImvTdxmVAd1oWoa9DkKRGy63ElZtB7w/gviz/tq?tqx=out:json&gid=1049140020";
+  const LIST_SEL = "#top3-list";
+  const LIST = document.querySelector(LIST_SEL);
+  if (LIST) LIST.innerHTML = "<li>Загрузка…</li>";
+
+  // Нормализация чисел: убираем пробелы/nbsp, запятые -> точка
+  const toNum = v => parseFloat(String(v ?? "")
+    .replace(/\u00A0/g, "")
+    .replace(/\s/g, "")
+    .replace(",", "."));
+
+  function renderTop3(recs){
+    if (!LIST) return;
+    const M = ["🥇","🥈","🥉"];
+    LIST.innerHTML = recs.slice(0,3)
+      .map((r,i)=> `<li>${M[i]||""} ${r.name} — ${r.score}</li>`)
+      .join("\n");
+  }
+
+  // JSONP-хэндлер от GViz
+  window.google = window.google || {};
+  window.google.visualization = window.google.visualization || {};
+  window.google.visualization.Query = window.google.visualization.Query || {};
+  window.google.visualization.Query.setResponse = function(payload){
+    try {
+      const rows = (payload?.table?.rows || []).map(r => [
+        r.c?.[0]?.v ?? "",   // A: Имя
+        r.c?.[1]?.v ?? ""    // B: Очки
+      ]);
+      const recs = rows.map(([name,score]) => ({ name: String(name).trim(), score: toNum(score) }))
+                       .filter(r => r.name && Number.isFinite(r.score))
+                       .sort((a,b)=> b.score - a.score);
+      renderTop3(recs);
+    } catch (e) {
+      console.error("[ratings] parse error:", e);
+      if (LIST) LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
+    }
+  };
+
+  // Подгружаем JSONP-сценарий
+  function loadGViz(){
+    const s = document.createElement("script");
+    s.src = GVIZ_URL;
+    s.async = true;
+    s.onerror = () => {
+      console.error("[ratings] GViz script failed");
+      if (LIST) LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
+    };
+    document.head.appendChild(s);
+    // Таймаут на случай, если ответ не пришёл
+    setTimeout(() => {
+      if (LIST && LIST.textContent?.includes("Загрузка")) {
+        LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
+      }
+    }, 8000);
+  }
+
+  document.addEventListener("DOMContentLoaded", loadGViz);
+})();
+</script>
+<script>
+(function(){
+  const YAML_URL = "./data/announcements.yml";   // файл с объявлениями
+  const WRAP = document.getElementById("announcements");
+
+  // Небольшой маппер типов -> стили
+  const KIND = {
+    info:   { icon:"ℹ️",  cls:"info"    },
+    warn:   { icon:"⚠️",  cls:"warn"    },
+    success:{ icon:"✅",  cls:"success" },
+    event:  { icon:"📅",  cls:"info"    },
+  };
+
+  // Форматирование дат (опционально)
+  const fmtDate = s => {
+    if (!s) return "";
+    const d = new Date(s);
+    return isNaN(d) ? String(s) : d.toLocaleDateString("ru-RU", { day:"2-digit", month:"2-digit" });
+  };
+
+  // Рендер одного объявления
+  const view = it => {
+    const kind = KIND[(it.type||"info").toLowerCase()] || KIND.info;
+    const title = (it.title || "").trim();
+    const text  = (it.text  || "").trim();
+    const when  = fmtDate(it.date);
+    const link  = (it.link  || "").trim();
+    const label = (it.link_label || "Подробнее");
+
+    const meta  = [when, it.tag].filter(Boolean).join(" • ");
+    const metaHtml = meta ? `<div class="ann-meta">${meta}</div>` : "";
+
+    const linkHtml = link ? `<a class="ann-link" href="${link}" target="_blank">${label}</a>` : "";
+
+    return `
+      <div class="ann ann--${kind.cls}">
+        <div class="ann-icon">${kind.icon}</div>
+        <div class="ann-body">
+          ${title ? `<div class="ann-title">${title}</div>` : ""}
+          ${text ?  `<div class="ann-text">${text}</div>`  : ""}
+          <div class="ann-foot">
+            ${metaHtml}
+            ${linkHtml}
+          </div>
+        </div>
+      </div>`;
+  };
+
+  async function load(){
+    try{
+      const res = await fetch(YAML_URL, { cache:"no-store" });
+      if (!res.ok) throw new Error("HTTP "+res.status);
+      const yaml = await res.text();
+      let items = jsyaml.load(yaml);
+
+      // Поддерживаем как массив, так и объект-словарь
+      if (!Array.isArray(items)) items = (items && typeof items==="object") ? Object.values(items) : [];
+
+      // Фильтры/сортировки:
+      // - скрыть просроченные (если указан until и он < сегодня)
+      // - сортировать по date (новые сверху)
+      const today = new Date();
+      items = items.filter(x=>{
+        if (!x) return false;
+        if (x.until){
+          const u = new Date(x.until);
+          if (!isNaN(u) && u < today) return false;
+        }
+        return true;
+      }).sort((a,b)=>{
+        const da = new Date(a.date || 0).getTime();
+        const db = new Date(b.date || 0).getTime();
+        return db - da;
+      });
+
+      WRAP.innerHTML = items.length
+        ? items.map(view).join("")
+        : `<div class="muted">Пока нет объявлений</div>`;
+    }catch(e){
+      console.error(e);
+      WRAP.innerHTML = `<div class="muted">Не удалось загрузить объявления</div>`;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", load);
+})();
+</script>
 </body>
 </html>
