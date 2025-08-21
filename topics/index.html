@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Алгосы — занятия</title>
-  <link rel="icon" href="./static/logo.png" type="image/png" media="(prefers-color-scheme: light)">
-  <link rel="icon" href="./static/logo_neg.png" type="image/png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/algosy/static/logo.png" type="image/png" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="/algosy/static/logo_neg.png" type="image/png" media="(prefers-color-scheme: dark)">
   <link rel="preconnect" href="https://unpkg.com">
   <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
   <style>
@@ -46,9 +46,9 @@
         <span>Алгосы</span>
       </div>
       <div class="spacer"></div>
-      <a class="btn" href="index.html">🏠 Главная</a>
-      <a class="btn" href="topics.html">📚 Занятия</a>
-      <a class="btn" href="ratings.html">🏆 Рейтинги</a>
+      <a class="btn" href="/algosy/">🏠 Главная</a>
+      <a class="btn" href="/algosy/topics/">📚 Занятия</a>
+      <a class="btn" href="/algosy/ratings/">🏆 Рейтинги</a>
     </nav>
   </header>
 
@@ -68,7 +68,7 @@
 
   <script>
   (function(){
-    const YAML_URL = "./data/topics.yml"; // положи сюда свой конфиг
+    const YAML_URL = "/algosy/data/topics.yml";
     const grid = document.getElementById('grid');
     const q = document.getElementById('q');
 
@@ -93,7 +93,7 @@
 
     function render(list){
       if (!list.length){
-        grid.innerHTML = `<div class="empty">Пока пусто. Добавь элементы в <code>data/topics.yml</code>.</div>`;
+        grid.innerHTML = `<div class="empty">Пока пусто. Добавь элементы в <code>/algosy/data/topics.yml</code>.</div>`;
         return;
       }
       grid.innerHTML = list.map(cardHTML).join("");

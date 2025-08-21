@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Алгосы</title><!-- Светлая тема -->
-  <link rel="icon" href="./static/logo.png" type="image/png" media="(prefers-color-scheme: light)">
-  <link rel="icon" href="./static/logo_neg.png" type="image/png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/algosy/static/logo.png" type="image/png" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="/algosy/static/logo_neg.png" type="image/png" media="(prefers-color-scheme: dark)">
   <link rel="preconnect" href="https://unpkg.com">
   <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
   <style>
@@ -88,14 +88,14 @@
     <nav class="nav">
       <div class="logo">
         <div class="logo-badge">
-            <img src="./static/logo_neg.png" alt="logo">
+            <img src="/algosy/static/logo_neg.png" alt="logo">
         </div>
         <span>Алгосы</span>
       </div>
       <div class="spacer"></div>
-      <a class="btn" href="index.html">🏠 Главная</a>
-      <a class="btn" href="topics.html">📚 Занятия</a>
-      <a class="btn" href="ratings.html">🏆 Рейтинги</a>
+      <a class="btn" href="/algosy/">🏠 Главная</a>
+      <a class="btn" href="/algosy/topics/">📚 Занятия</a>
+      <a class="btn" href="/algosy/ratings/">🏆 Рейтинги</a>
     </nav>
   </header>
 
@@ -197,7 +197,7 @@
 </script>
 <script>
 (function(){
-  const YAML_URL = "./data/announcements.yml";   // файл с объявлениями
+  const YAML_URL = "/algosy/data/announcements.yml";
   const WRAP = document.getElementById("announcements");
 
   // Небольшой маппер типов -> стили
