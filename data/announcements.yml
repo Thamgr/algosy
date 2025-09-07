@@ -4,3 +4,9 @@
   text: Просто зацените эту красоту
   link: https://thamgr.github.io/algosy/
   link_label: Туть
+- type: info
+  date: 2025-09-09        # опционально (используется для сортировки)
+  title: Первое занятие
+  text: В субботу 13.09, 11:00
+  link: https://yandex.zoom.us/j/4451722167
+  link_label: Зум
