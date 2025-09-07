@@ -135,16 +135,16 @@
 
   <script>
 (function(){
-  const GVIZ_URL = "https://docs.google.com/spreadsheets/d/1SBeX7SN7MSNwImvTdxmVAd1oWoa9DkKRGy63ElZtB7w/gviz/tq?tqx=out:json&gid=1049140020";
+  // API URL for ratings data
+  const API_URL = "http://89.169.183.158:8000/ratings?type=list";
+  // CORS proxy options (try different ones if needed)
+  const CORS_PROXY = "https://api.allorigins.win/raw?url=";
+  
   const LIST_SEL = "#top3-list";
   const LIST = document.querySelector(LIST_SEL);
   if (LIST) LIST.innerHTML = "<li>Загрузка…</li>";
 
-  // Нормализация чисел: убираем пробелы/nbsp, запятые -> точка
-  const toNum = v => parseFloat(String(v ?? "")
-    .replace(/\u00A0/g, "")
-    .replace(/\s/g, "")
-    .replace(",", "."));
+  // No fallback data - we'll only use the API
 
   function renderTop3(recs){
     if (!LIST) return;
@@ -154,45 +154,69 @@
       .join("\n");
   }
 
-  // JSONP-хэндлер от GViz
-  window.google = window.google || {};
-  window.google.visualization = window.google.visualization || {};
-  window.google.visualization.Query = window.google.visualization.Query || {};
-  window.google.visualization.Query.setResponse = function(payload){
+  async function fetchRatings() {
     try {
-      const rows = (payload?.table?.rows || []).map(r => [
-        r.c?.[0]?.v ?? "",   // A: Имя
-        r.c?.[1]?.v ?? ""    // B: Очки
-      ]);
-      const recs = rows.map(([name,score]) => ({ name: String(name).trim(), score: toNum(score) }))
-                       .filter(r => r.name && Number.isFinite(r.score))
-                       .sort((a,b)=> b.score - a.score);
-      renderTop3(recs);
-    } catch (e) {
-      console.error("[ratings] parse error:", e);
+      // Method 1: Try direct fetch (works when served from proper server)
+      try {
+        const response = await fetch(API_URL);
+        if (response.ok) {
+          const data = await response.json();
+          processRatings(data);
+          return;
+        }
+      } catch (directError) {
+        console.log('[ratings] Direct fetch failed, trying proxy', directError);
+      }
+      
+      // Method 2: Try CORS proxy
+      try {
+        const proxyUrl = CORS_PROXY + encodeURIComponent(API_URL);
+        const proxyResponse = await fetch(proxyUrl);
+        if (proxyResponse.ok) {
+          const data = await proxyResponse.json();
+          processRatings(data);
+          return;
+        }
+      } catch (proxyError) {
+        console.log('[ratings] Proxy fetch failed', proxyError);
+      }
+      
+      // If all methods fail, show error
+      console.log('[ratings] All fetch methods failed');
+      if (LIST) LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
+      
+    } catch (error) {
+      console.error('[ratings] All fetch methods failed', error);
       if (LIST) LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
     }
-  };
-
-  // Подгружаем JSONP-сценарий
-  function loadGViz(){
-    const s = document.createElement("script");
-    s.src = GVIZ_URL;
-    s.async = true;
-    s.onerror = () => {
-      console.error("[ratings] GViz script failed");
-      if (LIST) LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
-    };
-    document.head.appendChild(s);
-    // Таймаут на случай, если ответ не пришёл
-    setTimeout(() => {
-      if (LIST && LIST.textContent?.includes("Загрузка")) {
-        LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
-      }
-    }, 8000);
   }
 
-  document.addEventListener("DOMContentLoaded", loadGViz);
+  function processRatings(data) {
+    try {
+      if (!data || Object.keys(data).length === 0) {
+        if (LIST) LIST.innerHTML = "<li>Нет данных</li>";
+        return;
+      }
+
+      // Convert data to array format
+      const recs = Object.entries(data).map(([username, info]) => {
+        const name = info[0] || username;
+        const rating = info[1] || 0;
+        return { name, score: rating };
+      });
+
+      // Sort by rating (descending)
+      recs.sort((a, b) => b.score - a.score);
+      
+      // Render top 3
+      renderTop3(recs);
+    } catch (e) {
+      console.error("[ratings] process error:", e);
+      if (LIST) LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", fetchRatings);
 })();
 </script>
 <script>

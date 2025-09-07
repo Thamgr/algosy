@@ -77,92 +77,96 @@
 
   <script>
   (function(){
-    const GVIZ_URL = "https://docs.google.com/spreadsheets/d/1SBeX7SN7MSNwImvTdxmVAd1oWoa9DkKRGy63ElZtB7w/gviz/tq?tqx=out:json&gid=0";
+    // Original API URL
+    const API_URL = "http://89.169.183.158:8000/ratings?type=list";
+    
+    // CORS proxy options (try different ones if needed)
+    // Note: When running locally with file:// protocol, CORS restrictions will apply
+    // In production, this page should be served from a proper web server
+    const CORS_PROXY = "https://api.allorigins.win/raw?url=";
+    
     const TBODY = document.querySelector('#ratings-table tbody');
 
-    const toNum = v => parseFloat(String(v ?? '').replace(/\u00A0/g,'').replace(/\s/g,'').replace(',', '.'));
     const fmt = n => Number.isFinite(n) ? (Math.abs(n - Math.round(n)) < 1e-6 ? String(Math.round(n)) : n.toFixed(1)) : '—';
 
-    function buildSparkline(values, w=100, h=48){
-      let hasSegment = false;
-      for (let i=1;i<values.length;i++){
-        if (Number.isFinite(values[i-1]) && Number.isFinite(values[i])) { hasSegment = true; break; }
-      }
-      if (!hasSegment) return `<svg class="spark" viewBox="0 0 ${w} ${h}"></svg>`;
-
-      const min = 400, max = 2000;
-      const pad = 6, iw = w - pad*2, ih = h - pad*2;
-      const step = iw / Math.max(1, values.length-1);
-      const mapY = v => (ih - (v - min)/(max-min) * ih) + pad;
-      const mapX = i => pad + i*step;
-
-      let d = "", started = false;
-      values.forEach((v,i)=>{
-        if (Number.isFinite(v)){
-          const x = mapX(i), y = mapY(v);
-          d += (started ? " L" : " M") + x + " " + y;
-          started = true;
-        } else {
-          started = false;
-        }
-      });
-
-      return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">\n        <path d="${d}" fill="none" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#6ae3ff'}" stroke-width="2" stroke-linecap="round"/>\n      </svg>`;
+    function buildEmptySparkline(w=100, h=48){
+      return `<svg class="spark" viewBox="0 0 ${w} ${h}"></svg>`;
     }
 
-    function render(payload){
-      try{
-        const rows = (payload?.table?.rows || []).map(r => (r.c||[]).map(c => c ? (c.v ?? '') : ''));
-        if (!rows.length){ TBODY.innerHTML = '<tr><td colspan="4">Нет данных</td></tr>'; return; }
+    // No fallback data - we'll only use the API
 
-        const header = rows[0];               // [name, id1, id2, ...]
-        const data   = rows.slice(1);         // участники
+    async function fetchRatings() {
+      TBODY.innerHTML = '<tr><td colspan="4">Загрузка…</td></tr>';
+      
+      // Try multiple methods to get the data
+      try {
+        // Method 1: Try direct fetch (works when served from proper server)
+        try {
+          const response = await fetch(API_URL);
+          if (response.ok) {
+            const data = await response.json();
+            renderRatings(data);
+            return;
+          }
+        } catch (directError) {
+          console.log('[ratings] Direct fetch failed, trying proxy', directError);
+        }
+        
+        // Method 2: Try CORS proxy
+        try {
+          const proxyUrl = CORS_PROXY + encodeURIComponent(API_URL);
+          const proxyResponse = await fetch(proxyUrl);
+          if (proxyResponse.ok) {
+            const data = await proxyResponse.json();
+            renderRatings(data);
+            return;
+          }
+        } catch (proxyError) {
+          console.log('[ratings] Proxy fetch failed', proxyError);
+        }
+        
+        // If all methods fail, show error
+        console.log('[ratings] All fetch methods failed');
+        TBODY.innerHTML = '<tr><td colspan="4">Не удалось загрузить</td></tr>';
+        
+      } catch (error) {
+        console.error('[ratings] All fetch methods failed', error);
+        TBODY.innerHTML = '<tr><td colspan="4">Не удалось загрузить</td></tr>';
+      }
+    }
 
-        const ids = header.slice(1).map((x,idx)=>{
-          const s = String(x ?? '').trim();
-          const ok = /^\d+$/.test(s);
-          return { idx, id: ok ? Number(s) : NaN };
-        }).filter(o => Number.isFinite(o.id));
-        const order = ids.sort((a,b)=> a.id - b.id);
-        const nPeriods = order.length;
+    function renderRatings(data) {
+      try {
+        if (!data || Object.keys(data).length === 0) {
+          TBODY.innerHTML = '<tr><td colspan="4">Нет данных</td></tr>';
+          return;
+        }
 
-        const recs = data.map(r => {
-          const name = String(r[0]||'').trim();
-          if (!name) return null;
-          let prev = 400;
-          const series = order.map(o => {
-            const raw = r[o.idx + 1];
-            const v = toNum(raw);
-            if (Number.isFinite(v)) prev = v;
-            return prev;
-          });
-          const current = series[nPeriods-1] ?? 400;
-          return { name, series, current };
-        }).filter(Boolean);
+        // Convert data to array format
+        const recs = Object.entries(data).map(([username, info]) => {
+          const name = info[0] || username;
+          const rating = info[1] || 0;
+          return { username, name, current: rating };
+        });
 
-        recs.sort((a,b)=> b.current - a.current);
+        // Sort by rating (descending)
+        recs.sort((a, b) => b.current - a.current);
 
-        TBODY.innerHTML = recs.map((e,idx)=>`\n          <tr>\n            <td>${idx+1}</td>\n            <td>${e.name}</td>\n            <td class=\"score\">${fmt(e.current)}</td>\n            <td>${buildSparkline(e.series)}</td>\n          </tr>`).join("") || '<tr><td colspan="4">Нет данных</td></tr>';
-      }catch(e){
-        console.error('[ratings] parse error', e);
+        // Render table
+        TBODY.innerHTML = recs.map((e, idx) => `
+          <tr>
+            <td>${idx+1}</td>
+            <td>${e.name}</td>
+            <td class="score">${fmt(e.current)}</td>
+            <td>${buildEmptySparkline()}</td>
+          </tr>`).join("") || '<tr><td colspan="4">Нет данных</td></tr>';
+      } catch (e) {
+        console.error('[ratings] render error', e);
         TBODY.innerHTML = '<tr><td colspan="4">Ошибка данных</td></tr>';
       }
     }
 
-    window.google = window.google || {};
-    window.google.visualization = window.google.visualization || {};
-    window.google.visualization.Query = window.google.visualization.Query || {};
-    window.google.visualization.Query.setResponse = render;
-
-    function load(){
-      const s = document.createElement('script');
-      s.src = GVIZ_URL;
-      s.async = true;
-      s.onerror = () => TBODY.innerHTML = '<tr><td colspan="4">Не удалось загрузить</td></tr>';
-      document.head.appendChild(s);
-      setTimeout(()=>{ if (TBODY.textContent.includes('Загрузка')) TBODY.innerHTML = '<tr><td colspan="4">Не удалось загрузить</td></tr>'; }, 8000);
-    }
-    document.addEventListener('DOMContentLoaded', load);
+    document.addEventListener('DOMContentLoaded', fetchRatings);
   })();
   </script>
 </body>
