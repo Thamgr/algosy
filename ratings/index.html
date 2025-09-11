@@ -26,9 +26,10 @@
     .body{padding:14px 18px}
 
     table{width:100%;border-collapse:collapse;}
-    th,td{padding:10px 12px;text-align:left;}
+    th,td{padding:16px 12px;text-align:left;}
     th{color:var(--subtle);font-weight:600;font-size:14px;border-bottom:1px solid rgba(255,255,255,.1);}
-    td{border-bottom:1px solid rgba(255,255,255,.05);}
+    td{border-bottom:1px solid rgba(255,255,255,.05);line-height:1.4;}
+    tr{min-height:50px;}
     td.score{font-variant-numeric:tabular-nums;}
 
     th:nth-child(1), td:nth-child(1) { width: 40px; }   /* # */
@@ -101,7 +102,7 @@
   </header>
 
   <main class="container">
-    <h1>Рейтинги по контестам</h1>
+    <h1>Рейтинг-лист</h1>
     <section class="panel">
       <div class="body">
         <table id="ratings-table">
