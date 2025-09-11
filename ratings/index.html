@@ -34,10 +34,55 @@
     th:nth-child(1), td:nth-child(1) { width: 40px; }   /* # */
     th:nth-child(2), td:nth-child(2) { width: auto; }   /* Имя */
     th:nth-child(3), td:nth-child(3) { width: 80px; }   /* Текущий */
-    th:nth-child(4), td:nth-child(4) { width: 200px; }  /* История */
 
     .spark { width:200px; height:40px; }
 
+    /* Info icon and tooltip styles */
+    .info-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--muted);
+      color: var(--subtle);
+      font-size: 11px;
+      font-weight: bold;
+      margin-left: 4px;
+      cursor: help;
+      position: relative;
+    }
+    
+    .info-icon:hover {
+      background: var(--accent);
+      color: var(--surface);
+    }
+    
+    .tooltip {
+      position: absolute;
+      visibility: hidden;
+      background: var(--muted);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: normal;
+      white-space: nowrap;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.2s, visibility 0.2s;
+      z-index: 10;
+    }
+    
+    .info-icon:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+    
     footer{color:var(--subtle);font-size:14px;padding:24px 0;text-align:center}
   </style>
 </head>
@@ -61,10 +106,10 @@
       <div class="body">
         <table id="ratings-table">
           <thead>
-            <tr><th>#</th><th>Участник</th><th>Эло</th><th>История</th></tr>
+            <tr><th>#</th><th>Участник</th><th>Очки <span class="info-icon">i<span class="tooltip">Рейтинг учитывает рейтинг codeforces и решение задач на informatics. Max: 1000</span></span></th></tr>
           </thead>
           <tbody>
-            <tr><td colspan="4">Загрузка…</td></tr>
+            <tr><td colspan="3">Загрузка…</td></tr>
           </tbody>
         </table>
       </div>
@@ -96,7 +141,7 @@
     // No fallback data - we'll only use the API
 
     async function fetchRatings() {
-      TBODY.innerHTML = '<tr><td colspan="4">Загрузка…</td></tr>';
+      TBODY.innerHTML = '<tr><td colspan="3">Загрузка…</td></tr>';
       
       // Try multiple methods to get the data
       try {
@@ -127,18 +172,18 @@
         
         // If all methods fail, show error
         console.log('[ratings] All fetch methods failed');
-        TBODY.innerHTML = '<tr><td colspan="4">Не удалось загрузить</td></tr>';
+        TBODY.innerHTML = '<tr><td colspan="3">Не удалось загрузить</td></tr>';
         
       } catch (error) {
         console.error('[ratings] All fetch methods failed', error);
-        TBODY.innerHTML = '<tr><td colspan="4">Не удалось загрузить</td></tr>';
+        TBODY.innerHTML = '<tr><td colspan="3">Не удалось загрузить</td></tr>';
       }
     }
 
     function renderRatings(data) {
       try {
         if (!data || Object.keys(data).length === 0) {
-          TBODY.innerHTML = '<tr><td colspan="4">Нет данных</td></tr>';
+          TBODY.innerHTML = '<tr><td colspan="3">Нет данных</td></tr>';
           return;
         }
 
@@ -158,11 +203,10 @@
             <td>${idx+1}</td>
             <td>${e.name}</td>
             <td class="score">${fmt(e.current)}</td>
-            <td>${buildEmptySparkline()}</td>
-          </tr>`).join("") || '<tr><td colspan="4">Нет данных</td></tr>';
+          </tr>`).join("") || '<tr><td colspan="3">Нет данных</td></tr>';
       } catch (e) {
         console.error('[ratings] render error', e);
-        TBODY.innerHTML = '<tr><td colspan="4">Ошибка данных</td></tr>';
+        TBODY.innerHTML = '<tr><td colspan="3">Ошибка данных</td></tr>';
       }
     }
 
