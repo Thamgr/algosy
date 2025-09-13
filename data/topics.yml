@@ -1,4 +1,4 @@
-- name: Лето
-  photo: /algosy/static/kolobki.jpg
-  contest: https://informatics.msk.ru/course/view.php?id=5637
-  lesson: https://www.youtube.com/watch?v=xvFZjo5PgG0
+- name: Асимптотика & Сортировки
+  photo: /algosy/static/sort.jpg
+  contest: https://informatics.msk.ru/mod/statements/view.php?id=102456#1
+  lesson: https://disk.yandex.ru/i/f4Yfi4BtxgKAWQ
