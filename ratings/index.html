@@ -85,6 +85,48 @@
     }
     
     footer{color:var(--subtle);font-size:14px;padding:24px 0;text-align:center}
+    
+    /* Formula code styling */
+    code {
+      background: var(--muted);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 14px;
+      display: inline-block;
+      margin: 4px 0;
+    }
+    
+    /* Collapsible section styling */
+    .collapsible {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .collapsible::after {
+      content: '▼';
+      font-size: 12px;
+      margin-left: 8px;
+      transition: transform 0.3s;
+    }
+    
+    .collapsible.collapsed::after {
+      transform: rotate(-90deg);
+    }
+    
+    .collapsible-content {
+      max-height: 500px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    
+    .collapsible-content.collapsed {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
   </style>
 </head>
 <body>
@@ -104,10 +146,16 @@
   <main class="container">
     <h1>Рейтинг-лист</h1>
     <section class="panel">
+      <div class="section-title collapsible collapsed">Описание рейтинга</div>
+      <div class="body collapsible-content collapsed">
+        <p>Очки считаются на основе количества решенных задач в контестах на informatics и рейтинга на codeforces.</p>
+        <p><code>score = 1000 * (0.5 * доля решенных задач на informatics + 0.5 * codeforces рейтинг / 2000)</code></p>
+      </div>
+      <div class="section-title">Таблица рейтинга</div>
       <div class="body">
         <table id="ratings-table">
           <thead>
-            <tr><th>#</th><th>Участник</th><th>Очки <span class="info-icon">i<span class="tooltip">Рейтинг учитывает рейтинг codeforces и решение задач на informatics. Max: 1000</span></span></th></tr>
+            <tr><th>#</th><th>Участник</th><th>Очки</th></tr>
           </thead>
           <tbody>
             <tr><td colspan="3">Загрузка…</td></tr>
@@ -123,6 +171,21 @@
 
   <script>
   (function(){
+    // Handle collapsible sections
+    document.addEventListener('DOMContentLoaded', function() {
+      const collapsibles = document.querySelectorAll('.collapsible');
+      
+      collapsibles.forEach(collapsible => {
+        collapsible.addEventListener('click', function() {
+          this.classList.toggle('collapsed');
+          const content = this.nextElementSibling;
+          if (content.classList.contains('collapsible-content')) {
+            content.classList.toggle('collapsed');
+          }
+        });
+      });
+    });
+    
     // Original API URL
     const API_URL = "http://89.169.183.158:8000/ratings?type=list";
     
