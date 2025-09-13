@@ -31,10 +31,16 @@
     td{border-bottom:1px solid rgba(255,255,255,.05);line-height:1.4;}
     tr{min-height:50px;}
     td.score{font-variant-numeric:tabular-nums;}
+    td.subscore{font-variant-numeric:tabular-nums; color:var(--subtle);}
 
     th:nth-child(1), td:nth-child(1) { width: 40px; }   /* # */
     th:nth-child(2), td:nth-child(2) { width: auto; }   /* Имя */
-    th:nth-child(3), td:nth-child(3) { width: 80px; }   /* Текущий */
+    th:nth-child(3), td:nth-child(3) { width: 80px; }   /* CF score */
+    th:nth-child(4), td:nth-child(4) { width: 80px; }   /* Informatics score */
+    th:nth-child(5), td:nth-child(5) {
+      width: 80px;
+      border-left: 1px solid rgba(255,255,255,.1);
+    }   /* Очки */
 
     .spark { width:200px; height:40px; }
 
@@ -155,7 +161,7 @@
       <div class="body">
         <table id="ratings-table">
           <thead>
-            <tr><th>#</th><th>Участник</th><th>Очки</th></tr>
+            <tr><th>#</th><th>Участник</th><th>Codeforces</th><th>Informatics</th><th>Очки</th></tr>
           </thead>
           <tbody>
             <tr><td colspan="3">Загрузка…</td></tr>
@@ -186,8 +192,8 @@
       });
     });
     
-    // Original API URL
-    const API_URL = "http://89.169.183.158:8000/ratings?type=list";
+    // API URL with full mode
+    const API_URL = "http://89.169.183.158:8000/ratings?type=list&mode=full";
     
     // CORS proxy options (try different ones if needed)
     // Note: When running locally with file:// protocol, CORS restrictions will apply
@@ -205,7 +211,7 @@
     // No fallback data - we'll only use the API
 
     async function fetchRatings() {
-      TBODY.innerHTML = '<tr><td colspan="3">Загрузка…</td></tr>';
+      TBODY.innerHTML = '<tr><td colspan="5">Загрузка…</td></tr>';
       
       // Try multiple methods to get the data
       try {
@@ -236,41 +242,47 @@
         
         // If all methods fail, show error
         console.log('[ratings] All fetch methods failed');
-        TBODY.innerHTML = '<tr><td colspan="3">Не удалось загрузить</td></tr>';
+        TBODY.innerHTML = '<tr><td colspan="5">Не удалось загрузить</td></tr>';
         
       } catch (error) {
         console.error('[ratings] All fetch methods failed', error);
-        TBODY.innerHTML = '<tr><td colspan="3">Не удалось загрузить</td></tr>';
+        TBODY.innerHTML = '<tr><td colspan="5">Не удалось загрузить</td></tr>';
       }
     }
 
     function renderRatings(data) {
       try {
         if (!data || Object.keys(data).length === 0) {
-          TBODY.innerHTML = '<tr><td colspan="3">Нет данных</td></tr>';
+          TBODY.innerHTML = '<tr><td colspan="5">Нет данных</td></tr>';
           return;
         }
 
-        // Convert data to array format
+        // Convert data to array format for the new JSON structure
         const recs = Object.entries(data).map(([username, info]) => {
-          const name = info[0] || username;
-          const rating = info[1] || 0;
-          return { username, name, current: rating };
+          return {
+            username,
+            name: info.name || username,
+            cf_score: info.cf_score || 0,
+            informatics_score: info.informatics_score || 0,
+            score: info.score || 0
+          };
         });
 
-        // Sort by rating (descending)
-        recs.sort((a, b) => b.current - a.current);
+        // Sort by total score (descending)
+        recs.sort((a, b) => b.score - a.score);
 
         // Render table
         TBODY.innerHTML = recs.map((e, idx) => `
           <tr>
             <td>${idx+1}</td>
             <td>${e.name}</td>
-            <td class="score">${fmt(e.current)}</td>
-          </tr>`).join("") || '<tr><td colspan="3">Нет данных</td></tr>';
+            <td class="subscore">${fmt(e.cf_score)}</td>
+            <td class="subscore">${fmt(e.informatics_score)}</td>
+            <td class="score">${fmt(e.score)}</td>
+          </tr>`).join("") || '<tr><td colspan="5">Нет данных</td></tr>';
       } catch (e) {
         console.error('[ratings] render error', e);
-        TBODY.innerHTML = '<tr><td colspan="3">Ошибка данных</td></tr>';
+        TBODY.innerHTML = '<tr><td colspan="5">Ошибка данных</td></tr>';
       }
     }
 
