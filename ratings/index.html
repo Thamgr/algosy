@@ -28,6 +28,11 @@
     table{width:100%;border-collapse:collapse;}
     th,td{padding:16px 12px;text-align:left;}
     th{color:var(--subtle);font-weight:600;font-size:14px;border-bottom:1px solid rgba(255,255,255,.1);}
+    th.sortable{cursor:pointer;user-select:none;}
+    th.sortable:hover{color:var(--text);}
+    th.sortable::after{content:"";margin-left:5px;opacity:0.5;}
+    th.sort-asc::after{content:"▲";opacity:1;}
+    th.sort-desc::after{content:"▼";opacity:1;}
     td{border-bottom:1px solid rgba(255,255,255,.05);line-height:1.4;}
     tr{min-height:50px;}
     td.score{font-variant-numeric:tabular-nums;}
@@ -161,7 +166,13 @@
       <div class="body">
         <table id="ratings-table">
           <thead>
-            <tr><th>#</th><th>Участник</th><th>Codeforces</th><th>Informatics</th><th>Очки</th></tr>
+            <tr>
+              <th>#</th>
+              <th>Участник</th>
+              <th class="sortable" data-sort="cf_score">Codeforces</th>
+              <th class="sortable" data-sort="informatics_score">Informatics</th>
+              <th class="sortable sort-desc" data-sort="score">Очки</th>
+            </tr>
           </thead>
           <tbody>
             <tr><td colspan="3">Загрузка…</td></tr>
@@ -192,6 +203,12 @@
       });
     });
     
+    // Current sort state
+    let currentSort = {
+      column: 'score',
+      direction: 'desc'
+    };
+    
     // API URL with full mode
     const API_URL = "http://89.169.183.158:8000/ratings?type=list&mode=full";
     
@@ -215,19 +232,8 @@
       
       // Try multiple methods to get the data
       try {
-        // Method 1: Try direct fetch (works when served from proper server)
-        try {
-          const response = await fetch(API_URL);
-          if (response.ok) {
-            const data = await response.json();
-            renderRatings(data);
-            return;
-          }
-        } catch (directError) {
-          console.log('[ratings] Direct fetch failed, trying proxy', directError);
-        }
         
-        // Method 2: Try CORS proxy
+        // Try CORS proxy
         try {
           const proxyUrl = CORS_PROXY + encodeURIComponent(API_URL);
           const proxyResponse = await fetch(proxyUrl);
@@ -240,7 +246,7 @@
           console.log('[ratings] Proxy fetch failed', proxyError);
         }
         
-        // If all methods fail, show error
+        // If fail, show error
         console.log('[ratings] All fetch methods failed');
         TBODY.innerHTML = '<tr><td colspan="5">Не удалось загрузить</td></tr>';
         
@@ -250,12 +256,51 @@
       }
     }
 
+    // Sort table by column
+    function sortTable(column) {
+      // If clicking the same column, toggle direction
+      if (currentSort.column === column) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+      } else {
+        // New column, set to descending by default
+        currentSort.column = column;
+        currentSort.direction = 'desc';
+      }
+      
+      // Update header classes
+      const headers = document.querySelectorAll('th.sortable');
+      headers.forEach(header => {
+        header.classList.remove('sort-asc', 'sort-desc');
+        if (header.dataset.sort === currentSort.column) {
+          header.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+        }
+      });
+      
+      // Re-render with current data
+      if (window.currentRatingsData) {
+        renderRatings(window.currentRatingsData);
+      }
+    }
+    
+    // Set up sort handlers
+    document.addEventListener('DOMContentLoaded', function() {
+      const sortableHeaders = document.querySelectorAll('th.sortable');
+      sortableHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+          sortTable(this.dataset.sort);
+        });
+      });
+    });
+
     function renderRatings(data) {
       try {
         if (!data || Object.keys(data).length === 0) {
           TBODY.innerHTML = '<tr><td colspan="5">Нет данных</td></tr>';
           return;
         }
+
+        // Store data for resorting
+        window.currentRatingsData = data;
 
         // Convert data to array format for the new JSON structure
         const recs = Object.entries(data).map(([username, info]) => {
@@ -268,8 +313,15 @@
           };
         });
 
-        // Sort by total score (descending)
-        recs.sort((a, b) => b.score - a.score);
+        // Sort by current sort column and direction
+        recs.sort((a, b) => {
+          const valueA = a[currentSort.column];
+          const valueB = b[currentSort.column];
+          
+          // Handle numeric comparison
+          const multiplier = currentSort.direction === 'asc' ? 1 : -1;
+          return (valueA - valueB) * multiplier;
+        });
 
         // Render table
         TBODY.innerHTML = recs.map((e, idx) => `
