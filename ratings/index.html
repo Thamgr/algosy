@@ -10,11 +10,11 @@
     :root{
       --bg:#0c0f14;--surface:#121621;--muted:#1a1f2b;--text:#e6e6ea;--subtle:#aab1c3;--accent:#6ae3ff;--accent-2:#9bff8a;--radius:16px;--shadow:0 8px 28px rgba(0,0,0,.35);--maxw:1100px;
     }
-    body{margin:0;font-family:system-ui, sans-serif;background:var(--bg);color:var(--text);} 
+    body{margin:0;font-family:system-ui, sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
     a{color:var(--accent);text-decoration:none}
-    .container{max-width:var(--maxw);margin:0 auto;padding:24px;}
-    header{position:sticky;top:0;background:#0c0f14d9;padding:14px 24px;}
-    .nav{display:flex;align-items:center;gap:16px;max-width:var(--maxw);margin:0 auto;}
+    .container{max-width:var(--maxw);margin:0 auto;padding:16px;}
+    header{position:sticky;top:0;background:#0c0f14d9;padding:14px 16px;backdrop-filter:saturate(1.2) blur(6px);z-index:100;}
+    .nav{display:flex;align-items:center;gap:16px;max-width:var(--maxw);margin:0 auto;flex-wrap:wrap;}
     .logo{display:flex;align-items:center;gap:10px;font-weight:700;}
     .logo-badge{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#172033;}
     .spacer{flex:1}
@@ -25,7 +25,13 @@
     .section-title{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--subtle);font-weight:600;}
     .body{padding:14px 18px}
 
-    table{width:100%;border-collapse:collapse;}
+    /* Responsive table styles */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table{width:100%;border-collapse:collapse;min-width:500px;}
     th,td{padding:16px 12px;text-align:left;}
     th{color:var(--subtle);font-weight:600;font-size:14px;border-bottom:1px solid rgba(255,255,255,.1);}
     th.sortable{cursor:pointer;user-select:none;}
@@ -48,6 +54,37 @@
     }   /* Очки */
 
     .spark { width:200px; height:40px; }
+    
+    /* Media queries for responsive design */
+    @media (max-width: 768px) {
+      .nav {
+        gap: 10px;
+      }
+      .container {
+        padding: 12px;
+      }
+      .body {
+        padding: 12px 14px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nav {
+        justify-content: center;
+      }
+      .spacer {
+        display: none;
+      }
+      .logo {
+        margin-bottom: 8px;
+        width: 100%;
+        justify-content: center;
+      }
+      .btn {
+        font-size: 14px;
+        padding: 6px 10px;
+      }
+    }
 
     /* Info icon and tooltip styles */
     .info-icon {
@@ -164,20 +201,22 @@
       </div>
       <div class="section-title">Таблица рейтинга</div>
       <div class="body">
-        <table id="ratings-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Участник</th>
-              <th class="sortable" data-sort="cf_score">Codeforces</th>
-              <th class="sortable" data-sort="informatics_score">Informatics</th>
-              <th class="sortable sort-desc" data-sort="score">Очки</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td colspan="3">Загрузка…</td></tr>
-          </tbody>
-        </table>
+        <div class="table-container">
+          <table id="ratings-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Участник</th>
+                <th class="sortable" data-sort="cf_score">Codeforces</th>
+                <th class="sortable" data-sort="informatics_score">Informatics</th>
+                <th class="sortable sort-desc" data-sort="score">Очки</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5">Загрузка…</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 

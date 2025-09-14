@@ -13,11 +13,11 @@
       --bg:#0c0f14;--surface:#121621;--muted:#1a1f2b;--text:#e6e6ea;--subtle:#aab1c3;--accent:#6ae3ff;--accent-2:#9bff8a;--radius:16px;--shadow:0 8px 28px rgba(0,0,0,.35);--maxw:1100px;
       --danger:#ff6b6b;--ok:#2fd28f;
     }
-    body{margin:0;font-family:system-ui, sans-serif;background:var(--bg);color:var(--text);} 
+    body{margin:0;font-family:system-ui, sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
     a{color:var(--accent);text-decoration:none}
-    .container{max-width:var(--maxw);margin:0 auto;padding:24px;}
-    header{position:sticky;top:0;background:#0c0f14d9;padding:14px 24px;}
-    .nav{display:flex;align-items:center;gap:16px;max-width:var(--maxw);margin:0 auto;}
+    .container{max-width:var(--maxw);margin:0 auto;padding:16px;}
+    header{position:sticky;top:0;background:#0c0f14d9;padding:14px 16px;backdrop-filter:saturate(1.2) blur(6px);z-index:100;}
+    .nav{display:flex;align-items:center;gap:16px;max-width:var(--maxw);margin:0 auto;flex-wrap:wrap;}
     .logo{display:flex;align-items:center;gap:10px;font-weight:700;}
     .logo-badge{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#172033;}
     .spacer{flex:1}
@@ -47,8 +47,48 @@
     @media(min-width:900px){.grid-two{grid-template-columns:2fr 1fr;}}
 
     .quick{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));}
-    .qcard{display:flex;align-items:center;justify-content:center;padding:16px;background:var(--muted);border-radius:14px;box-shadow:var(--shadow);}
+    .qcard{display:flex;align-items:center;justify-content:center;padding:16px;background:var(--muted);border-radius:14px;box-shadow:var(--shadow);text-align:center;word-break:break-word;}
     .qcard:hover{background:#1d2536}
+    
+    /* Media queries for responsive design */
+    @media (max-width: 768px) {
+      .nav {
+        gap: 10px;
+      }
+      .container {
+        padding: 12px;
+      }
+      .body {
+        padding: 12px 14px;
+      }
+      .quick {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nav {
+        justify-content: center;
+      }
+      .spacer {
+        display: none;
+      }
+      .logo {
+        margin-bottom: 8px;
+        width: 100%;
+        justify-content: center;
+      }
+      .btn {
+        font-size: 14px;
+        padding: 6px 10px;
+      }
+      .ann {
+        flex-direction: column;
+      }
+      .ann-icon {
+        align-self: flex-start;
+      }
+    }
 
     .list{list-style:none;padding:0;margin:0}
     .list li{padding:8px 0}
