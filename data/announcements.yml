@@ -1,9 +1,6 @@
 - type: info
   date: 2025-09-14
   title: Контест №1 открыт
-  text: Тема: сортировки и асимптотика
-  link: https://thamgr.github.io/algosy/topics/
-  link_label: Страница занятий
 - type: warn
   date: 2025-09-08
   title: Что делать уже сейчас
