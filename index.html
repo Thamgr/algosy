@@ -332,7 +332,7 @@
     const text  = (it.text  || "").trim();
     const when  = fmtDate(it.date);
     const link  = (it.link  || "").trim();
-    const label = (it.link_label || "Подробнее");
+    const label = (it.link_label || "");
 
     const meta  = [when, it.tag].filter(Boolean).join(" • ");
     const metaHtml = meta ? `<div class="ann-meta">${meta}</div>` : "";
