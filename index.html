@@ -221,10 +221,8 @@
 
   <script>
 (function(){
-  // API URL for ratings data
-  const API_URL = "http://89.169.183.158:8000/ratings?type=list";
-  // CORS proxy options (try different ones if needed)
-  const CORS_PROXY = "https://api.allorigins.win/raw?url=";
+  // API URL for ratings data - direct access without CORS proxy
+  const API_URL = "https://algosy-backend-proxy.vercel.app/api/proxy/ratings?type=list";
   
   const LIST_SEL = "#top3-list";
   const LIST = document.querySelector(LIST_SEL);
@@ -241,8 +239,6 @@
   }
 
   async function fetchRatings() {
-    try {
-      // Method 1: Try direct fetch (works when served from proper server)
       try {
         const response = await fetch(API_URL);
         if (response.ok) {
@@ -250,31 +246,14 @@
           processRatings(data);
           return;
         }
-      } catch (directError) {
-        console.log('[ratings] Direct fetch failed, trying proxy', directError);
+      } catch (error) {
+        console.log('[ratings] API fetch failed', error);
       }
       
-      // Method 2: Try CORS proxy
-      try {
-        const proxyUrl = CORS_PROXY + encodeURIComponent(API_URL);
-        const proxyResponse = await fetch(proxyUrl);
-        if (proxyResponse.ok) {
-          const data = await proxyResponse.json();
-          processRatings(data);
-          return;
-        }
-      } catch (proxyError) {
-        console.log('[ratings] Proxy fetch failed', proxyError);
-      }
-      
-      // If all methods fail, show error
+      // If fail, show error
       console.log('[ratings] All fetch methods failed');
       if (LIST) LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
-      
-    } catch (error) {
-      console.error('[ratings] All fetch methods failed', error);
-      if (LIST) LIST.innerHTML = "<li>Не удалось загрузить рейтинг</li>";
-    }
+
   }
 
   function processRatings(data) {

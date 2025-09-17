@@ -248,13 +248,8 @@
       direction: 'desc'
     };
     
-    // API URL with full mode
-    const API_URL = "http://89.169.183.158:8000/ratings?type=list&mode=full";
-    
-    // CORS proxy options (try different ones if needed)
-    // Note: When running locally with file:// protocol, CORS restrictions will apply
-    // In production, this page should be served from a proper web server
-    const CORS_PROXY = "https://api.allorigins.win/raw?url=";
+    // API URL - direct access without CORS proxy
+    const API_URL = "https://algosy-backend-proxy.vercel.app/api/proxy/ratings?type=list&mode=full";
     
     const TBODY = document.querySelector('#ratings-table tbody');
 
@@ -268,31 +263,22 @@
 
     async function fetchRatings() {
       TBODY.innerHTML = '<tr><td colspan="5">Загрузка…</td></tr>';
-      
-      // Try multiple methods to get the data
-      try {
         
-        // Try CORS proxy
+        // Direct API call without proxy
         try {
-          const proxyUrl = CORS_PROXY + encodeURIComponent(API_URL);
-          const proxyResponse = await fetch(proxyUrl);
-          if (proxyResponse.ok) {
-            const data = await proxyResponse.json();
+          const response = await fetch(API_URL);
+          if (response.ok) {
+            const data = await response.json();
             renderRatings(data);
             return;
           }
-        } catch (proxyError) {
-          console.log('[ratings] Proxy fetch failed', proxyError);
+        } catch (error) {
+          console.log('[ratings] API fetch failed', error);
         }
         
         // If fail, show error
         console.log('[ratings] All fetch methods failed');
         TBODY.innerHTML = '<tr><td colspan="5">Не удалось загрузить</td></tr>';
-        
-      } catch (error) {
-        console.error('[ratings] All fetch methods failed', error);
-        TBODY.innerHTML = '<tr><td colspan="5">Не удалось загрузить</td></tr>';
-      }
     }
 
     // Sort table by column
