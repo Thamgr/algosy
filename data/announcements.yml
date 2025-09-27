@@ -1,4 +1,10 @@
 - type: info
+  date: 2025-09-27
+  title: Контест №3 открыт
+- type: info
+  date: 2025-09-20
+  title: Контест №2 открыт
+- type: info
   date: 2025-09-14
   title: Контест №1 открыт
 - type: warn

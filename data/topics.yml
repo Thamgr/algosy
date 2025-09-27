@@ -1,8 +1,12 @@
-- name: Бинарный поиск
-  photo: /algosy/static/binsearch.jpg
-  contest: https://informatics.msk.ru/mod/statements/view.php?id=102457#1
-  lesson: https://disk.yandex.ru/i/XEw7EW-sTyF3dw
 - name: Асимптотика & Сортировки
   photo: /algosy/static/sort.jpg
   contest: https://informatics.msk.ru/mod/statements/view.php?id=102456#1
   lesson: https://disk.yandex.ru/i/f4Yfi4BtxgKAWQ
+- name: Бинарный поиск
+  photo: /algosy/static/binsearch.jpg
+  contest: https://informatics.msk.ru/mod/statements/view.php?id=102457#1
+  lesson: https://disk.yandex.ru/i/XEw7EW-sTyF3dw
+- name: Линейные алгоритмы
+  photo: /algosy/static/linear.jpg
+  contest: https://informatics.msk.ru/mod/statements/view.php?id=102458#1
+  lesson: https://disk.yandex.ru/i/6x4Jq_D_VDRHLw
