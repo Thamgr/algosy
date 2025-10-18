@@ -1,21 +1,4 @@
-- type: info
-  date: 2025-09-27
-  title: Контест №3 открыт
-- type: info
-  date: 2025-09-20
-  title: Контест №2 открыт
-- type: info
-  date: 2025-09-14
-  title: Контест №1 открыт
 - type: warn
-  date: 2025-09-08
-  title: Что делать уже сейчас
-  text: Заполняем формочку, регаемся в курс на информатикс
-  link: https://forms.gle/TMHmS8U6pup3UnUM8
-  link_label: Формочка
-- type: info
-  date: 2025-09-07
-  title: Первое занятие
-  text: В субботу 13.09, 11:00
-  link: https://yandex.zoom.us/j/4451722167
-  link_label: Зум
+  date: 2025-18-10
+  title: Скоро будет очное занятие
+
