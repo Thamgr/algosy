@@ -38,3 +38,7 @@
   photo: /algosy/static/sqrt.jpeg
   contest: https://informatics.msk.ru/mod/statements/view.php?id=102466#1
   lesson: https://disk.yandex.ru/i/lLrM_Fqh5mVNxQ
+- name: Дерево Фенвика
+  photo: /algosy/static/fenwick.png
+  contest: https://informatics.msk.ru/mod/statements/view.php?id=102465#1
+  lesson: https://disk.yandex.ru/i/-hFpyd0-vuaCHA
