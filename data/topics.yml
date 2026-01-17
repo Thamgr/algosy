@@ -42,3 +42,11 @@
   photo: /algosy/static/fenwick.png
   contest: https://informatics.msk.ru/mod/statements/view.php?id=102465#1
   lesson: https://disk.yandex.ru/i/-hFpyd0-vuaCHA
+- name: Сканирующая прямая
+  photo: /algosy/static/scanline.png
+  contest: https://informatics.msk.ru/mod/statements/view.php?id=106198#1
+  lesson: https://disk.yandex.ru/i/qonRvhRTCI0eBw
+- name: Обходы графов. Мосты и точки сочленения
+  photo: /algosy/static/dfs.png
+  contest: https://informatics.msk.ru/mod/statements/view.php?id=102470#1
+  lesson: https://disk.yandex.ru/i/uMi21H20t6gRHw
