@@ -60,5 +60,21 @@
   lesson: https://disk.yandex.ru/i/dQvKxXmA4HtK_g
 - name: Паросочетания
   photo: /algosy/static/matchings.png
-  contest: https://informatics.msk.ru/mod/statements/view.php?id=102476#1
+  contest: https://informatics.msk.ru/course/view.php?id=5637
   lesson: https://disk.yandex.ru/i/yJ6f4pxEB9I3Qg
+- name: LCA
+  photo: /algosy/static/lca.jpg
+  contest: https://informatics.msk.ru/course/view.php?id=5637
+  lesson: https://disk.yandex.ru/i/FAvE9Pw9vJpQvQ
+- name: Отжиг
+  photo: /algosy/static/annealing.jpg
+  contest: https://informatics.msk.ru/course/view.php?id=5637
+  lesson: https://disk.yandex.ru/i/Wh0h9xh-cNBXZQ
+- name: ТЧ база
+  photo: /algosy/static/math.jpg
+  contest: https://informatics.msk.ru/course/view.php?id=5637
+  lesson: https://disk.yandex.ru/i/ZHbTjk_oq0wMww
+- name: Шпраг-Гранди
+  photo: /algosy/static/nim.jpg
+  contest: https://informatics.msk.ru/course/view.php?id=5637
+  lesson: https://disk.yandex.ru/i/wY4JXalQVKTf7w
