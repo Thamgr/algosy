@@ -82,3 +82,11 @@
   photo: /algosy/static/geom.png
   contest: https://informatics.msk.ru/mod/statements/view.php?id=102478#1
   lesson: https://disk.yandex.ru/i/32eRQ0zvD2EkOQ
+- name: Выпуклые оболочки
+  photo: /algosy/static/convex.png
+  contest: https://informatics.msk.ru/mod/statements/view.php?id=102479#1
+  lesson: https://disk.yandex.ru/i/94iQZJ2ymSNcSA
+- name: 4 в ряд
+  photo: /algosy/static/connect4.jpg
+  contest: https://github.com/Thamgr/Connect4Algosy
+  lesson: https://disk.yandex.ru/i/RzF4Ot51Z-FZwA
